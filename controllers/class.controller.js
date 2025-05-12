@@ -1,14 +1,17 @@
+import { errorHandler } from "../middlewares/error.js";
 import Class from "../models/Class.model.js";
+import Subject from "../models/Subject.model.js";
 
 export const CreateNewClass = async (req, res, next) => {
-  const { className, capacity } = req.body;
+  const { className, section, capacity } = req.body;
   try {
-    const classExists = await Class.findOne({ className });
+    const classExists = await Class.findOne({ className, section });
     if (classExists) {
       return next(errorHandler(400, "Class already exists"));
     }
     const newClass = new Class({
       className,
+      section,
       capacity,
     });
     await newClass.save();
@@ -16,7 +19,7 @@ export const CreateNewClass = async (req, res, next) => {
       return next(errorHandler(400, "Something went wrong"));
     }
     return res.status(201).json({
-      success: false,
+      success: true,
       message: "Class created successfuly",
       data: newClass,
     });
@@ -57,19 +60,28 @@ export const GetClassById = async (req, res, next) => {
 
 export const UpdateClassById = async (req, res, next) => {
   const { id } = req.params;
-  const { className, capacity } = req.body;
+  const { className, capacity, section } = req.body;
   try {
     const classExists = await Class.findOne({ _id: id });
     if (!classExists) {
       return next(errorHandler(400, "Class not found"));
     }
-    classExists.className = className;
-    classExists.capacity = capacity;
-    await classExists.save();
+
+    const updatedClass = await Class.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          className,
+          section,
+          capacity,
+        },
+      },
+      { new: true }
+    );
     return res.status(200).json({
       success: true,
       message: "Class updated successfuly",
-      data: classExists,
+      data: updatedClass,
     });
   } catch (error) {
     next(error);
@@ -84,9 +96,12 @@ export const DeleteClassById = async (req, res, next) => {
       return next(errorHandler(400, "Class not found"));
     }
     await Class.deleteOne({ _id: id });
+
+    await Subject.deleteMany({ classId: id });
+
     return res.status(200).json({
       success: true,
-      message: "Class deleted successfuly",
+      message: "Class and its subjects deleted successfuly",
     });
   } catch (error) {
     next(error);

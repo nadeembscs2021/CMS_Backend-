@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
 
-const examSchema = new mongoose.Schema(
+const resultSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       required: true,
     },
-    class: {
+    studentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Student",
+      required: true,
+    },
+    classId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Class",
       required: true,
@@ -16,26 +21,18 @@ const examSchema = new mongoose.Schema(
       ref: "Subject",
       required: true,
     },
+    marks: {
+      type: Number,
+      required: true,
+    },
     teacher: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Teacher",
-      required: true,
-    },
-    startDate: {
-      type: Date,
-      required: true,
-    },
-    endDate: {
-      type: Date,
-      required: true,
-    },
-    duration: {
-      type: Number,
       required: true,
     },
   },
   { timestamps: true }
 );
 
-const Exam = mongoose.model("Exam", examSchema);
-export default Exam;
+const Result = mongoose.model("Result", resultSchema);
+export default Result;

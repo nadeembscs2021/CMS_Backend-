@@ -1,9 +1,10 @@
+import { errorHandler } from "../middlewares/error.js";
 import Subject from "../models/Subject.model.js";
 
 export const CreateNewSubject = async (req, res, next) => {
   const { name, classId } = req.body;
   try {
-    const subjectExists = await Subject.findOne({ name, class: classId });
+    const subjectExists = await Subject.findOne({ name, classId: classId });
     if (subjectExists) {
       return next(errorHandler(400, "Subject already exists"));
     }
@@ -17,7 +18,7 @@ export const CreateNewSubject = async (req, res, next) => {
       return next(errorHandler(400, "Something went wrong"));
     }
     return res.status(201).json({
-      success: false,
+      success: true,
       message: "Subject created successfuly",
       data: newSubject,
     });
@@ -28,7 +29,7 @@ export const CreateNewSubject = async (req, res, next) => {
 
 export const GetAllSubjects = async (req, res, next) => {
   try {
-    const subjects = await Subject.find();
+    const subjects = await Subject.find().populate("classId");
     return res.status(200).json({
       success: true,
       message: "Subjects fetched successfuly",
@@ -42,7 +43,9 @@ export const GetAllSubjects = async (req, res, next) => {
 export const GetSubjectById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const subjectExists = await Subject.findOne({ _id: id });
+    const subjectExists = await Subject.findOne({ _id: id }).populate(
+      "classId"
+    );
     if (!subjectExists) {
       return next(errorHandler(400, "Subject not found"));
     }
@@ -64,13 +67,21 @@ export const UpdateSubjectById = async (req, res, next) => {
     if (!subjectExists) {
       return next(errorHandler(400, "Subject not found"));
     }
-    subjectExists.name = name;
-    subjectExists.classId = classId;
-    await subjectExists.save();
+
+    const updatedSubject = await Subject.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          name,
+          classId,
+        },
+      },
+      { new: true }
+    );
     return res.status(200).json({
       success: true,
       message: "Subject updated successfuly",
-      data: subjectExists,
+      data: updatedSubject,
     });
   } catch (error) {
     next(error);

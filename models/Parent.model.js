@@ -12,7 +12,7 @@ const parentSchema = new mongoose.Schema(
     },
     studentId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "student",
+      ref: "Student",
       required: true,
     },
     phone: {
@@ -20,6 +20,18 @@ const parentSchema = new mongoose.Schema(
     },
     address: {
       type: String,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      default: "parent",
     },
   },
   { timestamps: true }

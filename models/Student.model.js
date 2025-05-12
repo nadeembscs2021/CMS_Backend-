@@ -6,12 +6,13 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    class: {
+    classId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "class",
+      ref: "Class",
     },
-    section: {
-      type: String,
+    subject: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subject",
       required: true,
     },
     phone: {
@@ -27,16 +28,23 @@ const studentSchema = new mongoose.Schema(
       type: String,
     },
     birthDate: {
-      type: Date,
-    },
-    parent: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "parent",
-      required: true,
+      type: String,
     },
     gender: {
       type: String,
       required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      default: "student",
     },
   },
   { timestamps: true }

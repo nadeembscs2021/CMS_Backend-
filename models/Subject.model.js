@@ -8,7 +8,7 @@ const subjectSchema = new mongoose.Schema(
     },
     classId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "class",
+      ref: "Class",
       required: true,
     },
   },

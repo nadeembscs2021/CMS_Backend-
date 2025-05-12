@@ -6,14 +6,18 @@ const teacherSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+    },
     subject: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "subject",
+      ref: "Subject",
       required: true,
     },
     classId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "class",
+      ref: "Class",
       required: true,
     },
     phone: {
@@ -31,6 +35,18 @@ const teacherSchema = new mongoose.Schema(
     gender: {
       type: String,
       required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      default: "teacher",
     },
   },
   { timestamps: true }
