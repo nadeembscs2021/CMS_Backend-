@@ -55,9 +55,7 @@ export const CreateNewTeacher = async (req, res, next) => {
 
 export const GetAllTeachers = async (req, res, next) => {
   try {
-    const teachers = await Teacher.find()
-      .populate("classId", "className section")
-      .populate("subject", "name");
+    const teachers = await Teacher.find({});
     return res.status(200).json({
       success: true,
       message: "Teachers fetched successfuly",

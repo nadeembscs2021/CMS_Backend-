@@ -6,7 +6,7 @@ const examSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    class: {
+    classId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Class",
       required: true,
@@ -22,15 +22,15 @@ const examSchema = new mongoose.Schema(
       required: true,
     },
     startDate: {
-      type: Date,
+      type: String,
       required: true,
     },
     endDate: {
-      type: Date,
+      type: String,
       required: true,
     },
     duration: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
