@@ -18,6 +18,13 @@ export const CreateNewParent = async (req, res, next) => {
       return next(errorHandler(400, "Parent already exists"));
     }
 
+    const studentExists = await Parent.findOne({ studentId });
+    if (!studentExists) {
+      return next(
+        errorHandler(400, "Student already belongs to another parent")
+      );
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newParent = new Parent({
@@ -43,7 +50,7 @@ export const CreateNewParent = async (req, res, next) => {
 
 export const GetAllParents = async (req, res, next) => {
   try {
-    const parents = await Parent.find({});
+    const parents = await Parent.find({}).populate("studentId", "name");
     if (!parents) {
       return next(errorHandler(400, "Something went wrong"));
     }

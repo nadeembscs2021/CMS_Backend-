@@ -35,7 +35,10 @@ export const CreateNewExam = async (req, res, next) => {
 
 export const GetAllExams = async (req, res, next) => {
   try {
-    const exams = await Exam.find({});
+    const exams = await Exam.find({})
+      .populate("classId", "className section")
+      .populate("subject", "name")
+      .populate("teacher", "name");
     if (!exams) {
       return next(errorHandler(400, "Something went wrong"));
     }

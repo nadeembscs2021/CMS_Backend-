@@ -21,6 +21,9 @@ const parentSchema = new mongoose.Schema(
     address: {
       type: String,
     },
+    email: {
+      type: String,
+    },
     username: {
       type: String,
       required: true,

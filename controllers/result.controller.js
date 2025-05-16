@@ -33,7 +33,11 @@ export const CreateNewResult = async (req, res, next) => {
 
 export const GetAllResults = async (req, res, next) => {
   try {
-    const results = await Result.find({});
+    const results = await Result.find({})
+      .populate("studentId", "name")
+      .populate("classId", "className section")
+      .populate("subject", "name")
+      .populate("teacher", "name");
     if (!results) {
       return next(errorHandler(400, "Something went wrong"));
     }

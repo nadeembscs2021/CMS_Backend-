@@ -53,7 +53,9 @@ export const CreateNewStudent = async (req, res, next) => {
 
 export const GetAllStudents = async (req, res, next) => {
   try {
-    const students = await Student.find({});
+    const students = await Student.find({})
+      .populate("classId")
+      .populate("subject", "name");
     if (!students) {
       return next(errorHandler(400, "Something went wrong"));
     }
