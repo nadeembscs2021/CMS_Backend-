@@ -12,7 +12,7 @@ await mongoose
     console.log("Database connected");
   })
   .catch((error) => {
-    console.log("Failed to connect to database");
+    console.log("Failed to connect to database",error);
   });
 
 const app = express();
