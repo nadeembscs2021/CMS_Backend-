@@ -5,7 +5,6 @@ import bcrypt from "bcryptjs";
 export const CreateNewParent = async (req, res, next) => {
   const {
     fatherName,
-    motherName,
     studentId,
     phone,
     address,
@@ -18,18 +17,12 @@ export const CreateNewParent = async (req, res, next) => {
       return next(errorHandler(400, "Parent already exists"));
     }
 
-    const studentExists = await Parent.findOne({ studentId });
-    if (!studentExists) {
-      return next(
-        errorHandler(400, "Student already belongs to another parent")
-      );
-    }
+    
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newParent = new Parent({
       fatherName,
-      motherName,
       studentId,
       phone,
       address,
@@ -87,7 +80,6 @@ export const UpdateParentById = async (req, res, next) => {
   const { id } = req.params;
   const {
     fatherName,
-    motherName,
     studentId,
     phone,
     address,
@@ -110,7 +102,6 @@ export const UpdateParentById = async (req, res, next) => {
       {
         $set: {
           fatherName,
-          motherName,
           studentId,
           phone,
           address,
